@@ -3,7 +3,7 @@ package objects
 import (
 	"github.com/aws/aws-sdk-go/service/s3"
 
-	"github.com/avila-r/sthree/pointer"
+	"github.com/avila-r/sthree/pkg/pointer"
 )
 
 type List struct {
