@@ -18,6 +18,14 @@ func Time(t time.Time) *time.Time {
 	return &t
 }
 
+func InSlice[T any](t ...T) []*T {
+	r := []*T{}
+	for _, v := range t {
+		r = append(r, &v)
+	}
+	return r
+}
+
 func NotBlank(s string) *string {
 	if s == "" {
 		return nil
