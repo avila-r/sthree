@@ -4,11 +4,15 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/s3"
-
-	"github.com/avila-r/sthree/pkg/pointer"
 )
 
 type Get struct {
+	// The name of the bucket containing the object.
+	Bucket string
+
+	// Key name of the object to delete.
+	Key string
+
 	// To retrieve the checksum, this mode must be enabled.
 	ChecksumMode string
 
@@ -77,44 +81,7 @@ type Get struct {
 }
 
 func (m *Module) Get(key string, params ...Get) (*s3.GetObjectOutput, error) {
-	input := &s3.GetObjectInput{
-		Bucket: &m.Bucket,
-		Key:    &key,
-	}
-	if len(params) > 0 {
-		input = fromGetParams(m.Bucket, key, params[0])
-	}
+	input := GetInput(m.Bucket, key, params...)
 
 	return m.Sdk.GetObject(input)
-}
-
-func fromGetParams(bucket string, key string, params Get) *s3.GetObjectInput {
-	return &s3.GetObjectInput{
-		Bucket:              pointer.NotBlank(bucket),
-		ChecksumMode:        pointer.NotBlank(params.ChecksumMode),
-		ExpectedBucketOwner: pointer.NotBlank(params.ExpectedBucketOwner),
-
-		IfMatch:           pointer.NotBlank(params.IfMatch),
-		IfModifiedSince:   pointer.Time(params.IfModifiedSince),
-		IfNoneMatch:       pointer.NotBlank(params.IfNoneMatch),
-		IfUnmodifiedSince: pointer.Time(params.IfUnmodifiedSince),
-
-		Key:          pointer.NotBlank(key),
-		PartNumber:   pointer.NotZero(params.PartNumber),
-		Range:        pointer.NotBlank(params.Range),
-		RequestPayer: pointer.NotBlank(params.RequestPayer),
-
-		ResponseCacheControl:       pointer.NotBlank(params.ResponseCacheControl),
-		ResponseContentDisposition: pointer.NotBlank(params.ResponseContentDisposition),
-		ResponseContentEncoding:    pointer.NotBlank(params.ResponseContentEncoding),
-		ResponseContentLanguage:    pointer.NotBlank(params.ResponseContentLanguage),
-		ResponseContentType:        pointer.NotBlank(params.ResponseContentType),
-		ResponseExpires:            pointer.Time(params.ResponseExpires),
-
-		SSECustomerAlgorithm: pointer.NotBlank(params.SSECustomerAlgorithm),
-		SSECustomerKey:       pointer.NotBlank(params.SSECustomerKey),
-		SSECustomerKeyMD5:    pointer.NotBlank(params.SSECustomerKeyMD5),
-
-		VersionId: pointer.NotBlank(params.Version),
-	}
 }

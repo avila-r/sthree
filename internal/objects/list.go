@@ -2,11 +2,15 @@ package objects
 
 import (
 	"github.com/aws/aws-sdk-go/service/s3"
-
-	"github.com/avila-r/sthree/pkg/pointer"
 )
 
 type List struct {
+	// The name of the bucket containing the object.
+	Bucket string
+
+	// Key name of the object to delete.
+	Key string
+
 	// ContinuationToken indicates to Amazon S3 that the list is being continued
 	// on this bucket with a token. ContinuationToken is obfuscated and is not a
 	// real key. You can use this ContinuationToken for pagination of the list results.
@@ -26,68 +30,34 @@ type List struct {
 	// field to true.
 	FetchOwner bool
 
-	// Sets the maximum number of keys 
+	// Sets the maximum number of keys
 	// returned in the response.
 	MaxKeys int64
 
-	// Specifies the optional fields that 
-	// you want returned in the response. 
+	// Specifies the optional fields that
+	// you want returned in the response.
 	//
 	// Fields that you do not specify are not returned.
 	OptionalObjectAttributes []string
 
-	// Limits the response to keys that 
+	// Limits the response to keys that
 	// begin with the specified prefix.
 	Prefix string
 
-	// Confirms that the requester knows that 
+	// Confirms that the requester knows that
 	// she or he will be charged for the
 	// list objects request in V2 style.
 	RequestPayer string
 
-	// StartAfter is where you want 
+	// StartAfter is where you want
 	// Amazon S3 to start listing from.
 	StartAfter string
 }
 
 func (m *Module) ListObjects(params ...List) (*s3.ListObjectsV2Output, error) {
-	input := &s3.ListObjectsV2Input{
-		Bucket: &m.Bucket,
-	}
-	if len(params) > 0 {
-		input = fromListParams(m.Bucket, params[0])
-	}
+	input := ListInput(m.Bucket, params...)
 
 	return m.Sdk.ListObjectsV2(input)
-}
-
-func fromListParams(name string, params List) *s3.ListObjectsV2Input {
-	input := &s3.ListObjectsV2Input{
-		Bucket: &name,
-
-		ContinuationToken:   pointer.NotBlank(params.ContinuationToken),
-		Delimiter:           pointer.NotBlank(params.Delimiter),
-		EncodingType:        pointer.NotBlank(params.EncodingType),
-		ExpectedBucketOwner: pointer.NotBlank(params.ExpectedBucketOwner),
-		FetchOwner:          &params.FetchOwner,
-
-		Prefix:       pointer.NotBlank(params.Prefix),
-		RequestPayer: pointer.NotBlank(params.RequestPayer),
-		StartAfter:   pointer.NotBlank(params.StartAfter),
-	}
-
-	input.MaxKeys = pointer.Of[int64](1000)
-	if params.MaxKeys > 0 {
-		input.MaxKeys = &params.MaxKeys
-	}
-
-	attrs := []*string{}
-	for _, attr := range params.OptionalObjectAttributes {
-		attrs = append(attrs, &attr)
-	}
-	input.OptionalObjectAttributes = attrs
-
-	return input
 }
 
 // 'ListObjects' alias
