@@ -1,9 +1,5 @@
 package objects
 
-import (
-	"github.com/aws/aws-sdk-go/service/s3"
-)
-
 type Delete struct {
 	// The name of the bucket containing the object.
 	Bucket string
@@ -29,10 +25,4 @@ type Delete struct {
 
 	// Version ID used to reference a specific version of the object.
 	Version string
-}
-
-func (m *Module) Delete(key string, params ...Delete) (*s3.DeleteObjectOutput, error) {
-	input := DeleteInput(m.Bucket, key, params...)
-
-	return m.Sdk.DeleteObject(input)
 }

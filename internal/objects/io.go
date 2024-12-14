@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 type Upload struct {
@@ -21,10 +19,4 @@ func ToReadSeeker(t any) io.ReadSeeker {
 	}
 
 	return bytes.NewReader(json)
-}
-
-func (m *Module) Upload(params ...Upload) (*s3manager.UploadOutput, error) {
-	input := UploadInput(m.Bucket, params...)
-
-	return m.Uploader.Upload(input)
 }

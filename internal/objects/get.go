@@ -2,8 +2,6 @@ package objects
 
 import (
 	"time"
-
-	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 type Get struct {
@@ -78,10 +76,4 @@ type Get struct {
 
 	// Version ID used to reference a specific version of the object.
 	Version string
-}
-
-func (m *Module) Get(key string, params ...Get) (*s3.GetObjectOutput, error) {
-	input := GetInput(m.Bucket, key, params...)
-
-	return m.Sdk.GetObject(input)
 }

@@ -1,9 +1,5 @@
 package objects
 
-import (
-	"github.com/aws/aws-sdk-go/service/s3"
-)
-
 type List struct {
 	// The name of the bucket containing the object.
 	Bucket string
@@ -52,20 +48,4 @@ type List struct {
 	// StartAfter is where you want
 	// Amazon S3 to start listing from.
 	StartAfter string
-}
-
-func (m *Module) ListObjects(params ...List) (*s3.ListObjectsV2Output, error) {
-	input := ListInput(m.Bucket, params...)
-
-	return m.Sdk.ListObjectsV2(input)
-}
-
-// 'ListObjects' alias
-func (m *Module) All(params ...List) (*s3.ListObjectsV2Output, error) {
-	return m.ListObjects(params...)
-}
-
-// 'ListObjects' alias
-func (m *Module) List(params ...List) (*s3.ListObjectsV2Output, error) {
-	return m.ListObjects(params...)
 }
