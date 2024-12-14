@@ -8,12 +8,14 @@ import (
 
 	"github.com/avila-r/sthree/internal/buckets"
 	"github.com/avila-r/sthree/internal/objects"
+	"github.com/avila-r/sthree/internal/requests"
 )
 
 type Sthree struct {
 	Provider client.ConfigProvider
 	Sdk      *s3.S3
 	Buckets  *buckets.Module
+	Requests *requests.Module
 }
 
 func Connect(provider client.ConfigProvider, cfgs ...Config) *Sthree {
@@ -23,6 +25,9 @@ func Connect(provider client.ConfigProvider, cfgs ...Config) *Sthree {
 		Provider: provider,
 		Sdk:      s3,
 		Buckets: &buckets.Module{
+			Sdk: s3,
+		},
+		Requests: &requests.Module{
 			Sdk: s3,
 		},
 	}
