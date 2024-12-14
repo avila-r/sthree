@@ -1,6 +1,10 @@
 package pointer
 
-import "time"
+import (
+	"time"
+
+	"github.com/avila-r/sthree/pkg/constraints"
+)
 
 func Of[T any](v T) *T {
 	return &v
@@ -20,4 +24,20 @@ func NotBlank(s string) *string {
 	}
 
 	return &s
+}
+
+func NotFalse(b bool) *bool {
+	if !b {
+		return nil
+	}
+
+	return &b
+}
+
+func NotZero[T constraints.Arithmetic](n T) *T {
+	if n == 0 {
+		return nil
+	}
+
+	return &n
 }
