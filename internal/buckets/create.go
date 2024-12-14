@@ -6,84 +6,71 @@ import (
 	"github.com/avila-r/sthree/pkg/pointer"
 )
 
+// Bucket represents the configuration options for an S3 bucket.
+//
+// This struct encapsulates various attributes and permissions
+// that can be applied when creating an S3 bucket.
 type Bucket struct {
 	// The type of bucket.
-	//
 	// Optional field.
 	Type string
 
 	// The canned ACL to apply to the bucket.
-	//
 	// Not supported for directory buckets.
-	//
 	// Optional field.
 	ACL string
 
-	// Allows grantee the read, write, read ACP,
-	// and write ACP permissions on the bucket.
-	//
-	// This functionality is not supported
-	// for directory buckets.
+	// Grants the specified grantee full control over the bucket (read, write, read ACP, write ACP permissions).
+	// This functionality is not supported for directory buckets.
 	GrantFullControl string
 
-	// Allows grantee to list the objects in the bucket.
-	//
+	// Grants the specified grantee permission to list the objects in the bucket.
 	// This functionality is not supported for directory buckets.
 	GrantRead string
 
-	// Allows grantee to read the bucket ACL.
-	//
+	// Grants the specified grantee permission to read the bucket ACL.
 	// This functionality is not supported for directory buckets.
 	GrantReadACP string
 
-	// Allows grantee to create new objects in the bucket.
-	//
-	// For the bucket and object owners of existing objects, also allows deletions
-	// and overwrites of those objects.
-	//
+	// Grants the specified grantee permission to create new objects in the bucket.
+	// Also allows deletions and overwrites for existing objects if the grantee is the bucket or object owner.
 	// This functionality is not supported for directory buckets.
 	GrantWrite string
 
-	// Allows grantee to write the ACL for the applicable bucket.
-	//
+	// Grants the specified grantee permission to write the ACL for the bucket.
 	// This functionality is not supported for directory buckets.
 	GrantWriteACP string
 
-	// Specifies whether you want S3 Object Lock
-	// to be enabled for the new bucket.
-	//
-	// This functionality is not supported
-	// for directory buckets.
+	// Specifies whether to enable S3 Object Lock for the bucket.
+	// This functionality is not supported for directory buckets.
 	ObjectLockEnabledForBucket bool
 
-	// The container element for object ownership
-	// for a bucket's ownership controls.
+	// Specifies the ownership control for objects in the bucket.
 	ObjectOwnership string
 
-	// Specifies the information about
-	// the bucket that will be created.
-	//
-	// This functionality is only
-	// supported by directory buckets.
+	// Specifies the data redundancy settings for the bucket.
+	// This is only supported by directory buckets.
 	DataRedundancy string
 
-	// The name of the location where
-	// the bucket will be created.
-	//
-	// For directory buckets, the name of the location
-	// is the AZ ID of the Availability
-	//
-	// Zone where the bucket will be created.
-	// An example AZ ID value is usw2-az1.
+	// The name of the location where the bucket will be created.
+	// For directory buckets, this specifies the AZ ID of the availability zone (e.g., "usw2-az1").
 	LocationName string
 
-	// The type of location where the bucket will be created.
+	// Specifies the type of location where the bucket will be created.
 	LocationType string
 
-	// Specifies the Region where the bucket will be created.
+	// Specifies the AWS region where the bucket will be created.
 	LocationConstraint string
 }
 
+// Create creates a new S3 bucket with the specified name and optional parameters.
+//
+// If no parameters are provided, the bucket will be created with default settings.
+//
+// @param name The name of the bucket to create.
+// @param params Optional configuration parameters for the bucket.
+// @return A pointer to an s3.CreateBucketOutput containing details of the created bucket.
+// @return An error if the bucket creation fails.
 func (m *Module) Create(name string, params ...Bucket) (*s3.CreateBucketOutput, error) {
 	input := &s3.CreateBucketInput{
 		Bucket: &name,
@@ -95,10 +82,24 @@ func (m *Module) Create(name string, params ...Bucket) (*s3.CreateBucketOutput, 
 	return m.Sdk.CreateBucket(input)
 }
 
+// New is an alias for Create, providing an alternative method to create a new bucket.
+//
+// @param name The name of the bucket to create.
+// @param params Optional configuration parameters for the bucket.
+// @return A pointer to an s3.CreateBucketOutput containing details of the created bucket.
+// @return An error if the bucket creation fails.
 func (m *Module) New(name string, params ...Bucket) (*s3.CreateBucketOutput, error) {
 	return m.Create(name, params...)
 }
 
+// fromNewParams converts the provided Bucket configuration into an s3.CreateBucketInput.
+//
+// This function maps the custom Bucket fields to the appropriate AWS SDK structures,
+// ensuring that all fields are properly formatted.
+//
+// @param name The name of the bucket to create.
+// @param params The custom Bucket configuration.
+// @return A pointer to an s3.CreateBucketInput containing the transformed configuration.
 func fromNewParams(name string, params Bucket) *s3.CreateBucketInput {
 	return &s3.CreateBucketInput{
 		Bucket: &name,

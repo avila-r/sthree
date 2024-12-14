@@ -7,6 +7,15 @@ import (
 	"github.com/avila-r/sthree/pkg/pointer"
 )
 
+// GetInput constructs an s3.GetObjectInput for retrieving an object from S3.
+//
+// This method accepts a bucket name and an object key, with optional parameters
+// to customize the request. If no parameters are provided, default values are used.
+//
+// @param bucket The name of the S3 bucket containing the object.
+// @param key The key of the object to retrieve.
+// @param params Optional configuration parameters for the request.
+// @return A pointer to an s3.GetObjectInput with the configured values.
 func GetInput(bucket string, key string, params ...Get) *s3.GetObjectInput {
 	cfg := Get{}
 	if len(params) > 0 {
@@ -43,6 +52,14 @@ func GetInput(bucket string, key string, params ...Get) *s3.GetObjectInput {
 	}
 }
 
+// ListInput constructs an s3.ListObjectsV2Input for listing objects in an S3 bucket.
+//
+// This method accepts a bucket name and optional parameters to filter the listing.
+// If no parameters are provided, default values are used.
+//
+// @param bucket The name of the S3 bucket to list objects from.
+// @param params Optional configuration parameters for the listing.
+// @return A pointer to an s3.ListObjectsV2Input with the configured values.
 func ListInput(bucket string, params ...List) *s3.ListObjectsV2Input {
 	cfg := List{}
 	if len(params) > 0 {
@@ -79,6 +96,15 @@ func ListInput(bucket string, params ...List) *s3.ListObjectsV2Input {
 	return input
 }
 
+// PutInput constructs an s3.PutObjectInput for uploading an object to S3.
+//
+// This method accepts a bucket name, object body, and optional configuration parameters.
+// If no parameters are provided, default values are used.
+//
+// @param bucket The name of the S3 bucket to upload the object to.
+// @param body The body of the object to upload.
+// @param params Optional configuration parameters for the upload.
+// @return A pointer to an s3.PutObjectInput with the configured values.
 func PutInput(bucket string, body interface{}, params ...Put) *s3.PutObjectInput {
 	cfg := Put{}
 	if len(params) > 0 {
@@ -141,6 +167,15 @@ func PutInput(bucket string, body interface{}, params ...Put) *s3.PutObjectInput
 	return input
 }
 
+// DeleteInput constructs an s3.DeleteObjectInput for deleting an object from S3.
+//
+// This method accepts a bucket name, object key, and optional configuration parameters.
+// If no parameters are provided, default values are used.
+//
+// @param bucket The name of the S3 bucket to delete the object from.
+// @param key The key of the object to delete.
+// @param params Optional configuration parameters for the delete operation.
+// @return A pointer to an s3.DeleteObjectInput with the configured values.
 func DeleteInput(bucket string, key string, params ...Delete) *s3.DeleteObjectInput {
 	cfg := Delete{}
 	if len(params) > 0 {
@@ -158,6 +193,14 @@ func DeleteInput(bucket string, key string, params ...Delete) *s3.DeleteObjectIn
 	}
 }
 
+// UploadInput constructs an s3manager.UploadInput for uploading an object to S3.
+//
+// This method accepts a bucket name and optional configuration parameters.
+// If no parameters are provided, default values are used.
+//
+// @param bucket The name of the S3 bucket to upload the object to.
+// @param params Optional configuration parameters for the upload.
+// @return A pointer to an s3manager.UploadInput with the configured values.
 func UploadInput(bucket string, params ...Upload) *s3manager.UploadInput {
 	cfg := Upload{}
 	if len(params) > 0 {
