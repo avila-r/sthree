@@ -14,6 +14,9 @@ type Put struct {
 	// Bucket specifies the name of the S3 bucket where the object will be stored.
 	Bucket string
 
+	// Unique key of the object to be uploaded.
+	Key string
+
 	// Body contains the content of the object to be uploaded to S3.
 	// This can be any type that is serializable into an S3-compatible format.
 	Body interface{}
