@@ -105,7 +105,7 @@ func ListInput(bucket string, params ...List) *s3.ListObjectsV2Input {
 // @param body The body of the object to upload.
 // @param params Optional configuration parameters for the upload.
 // @return A pointer to an s3.PutObjectInput with the configured values.
-func PutInput(bucket string, body interface{}, params ...Put) *s3.PutObjectInput {
+func PutInput(bucket, key string, body interface{}, params ...Put) *s3.PutObjectInput {
 	cfg := Put{}
 	if len(params) > 0 {
 		cfg = params[0]
@@ -138,7 +138,7 @@ func PutInput(bucket string, body interface{}, params ...Put) *s3.PutObjectInput
 		GrantReadACP:     pointer.NotBlank(cfg.Config.GrantReadACP),
 		GrantWriteACP:    pointer.NotBlank(cfg.Config.GrantWriteACP),
 
-		Key: pointer.NotBlank(cfg.Config.Key),
+		Key: pointer.NotBlank(key),
 
 		ObjectLockLegalHoldStatus: pointer.NotBlank(cfg.Config.ObjectLockLegalHoldStatus),
 		ObjectLockMode:            pointer.NotBlank(cfg.Config.ObjectLockMode),
