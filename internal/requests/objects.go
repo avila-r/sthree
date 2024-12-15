@@ -66,7 +66,7 @@ func (m *Module) ListObjects(from objects.List) (*request.Request, *s3.ListObjec
 // - A request object for the S3 PutObject operation.
 // - A 'PutObjectOutput' containing the details of the uploaded object.
 func (m *Module) PutObject(from objects.Put) (*request.Request, *s3.PutObjectOutput) {
-	input := objects.PutInput(from.Bucket, from.Body, from)
+	input := objects.PutInput(from.Bucket, from.Key, from.Body, from)
 
 	return m.Sdk.PutObjectRequest(input)
 }
