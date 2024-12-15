@@ -1,13 +1,12 @@
 package buckets_test
 
 import (
-	"math/rand"
-	"strings"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/avila-r/sthree"
+	"github.com/avila-r/sthree/pkg/mock"
 )
 
 var client = func() *sthree.Sthree {
@@ -34,7 +33,7 @@ func Test_Create_Delete(t *testing.T) {
 	})
 
 	t.Run("default usecase", func(t *testing.T) {
-		name := RandomBucketName()
+		name := mock.RandomBucketName()
 
 		_, err := client.Buckets.Create(name)
 		if err != nil {
@@ -59,7 +58,7 @@ func Test_List(t *testing.T) {
 
 	quantity := 6
 	for i := 1; i < quantity; i++ {
-		name := RandomBucketName()
+		name := mock.RandomBucketName()
 
 		_, err := client.Buckets.Create(name)
 		if err != nil {
@@ -76,21 +75,4 @@ func Test_List(t *testing.T) {
 	for i, bucket := range output.Buckets {
 		t.Logf("[%v] Created Bucket: %v", i+1, *bucket.Name)
 	}
-}
-
-func RandomBucketName() string {
-	words := []string{
-		"apple", "banana", "cherry", "date", "elderberry", "fig", "grape",
-		"honeydew", "kiwi", "lemon", "mango", "nectarine", "orange", "papaya",
-		"quince", "raspberry", "strawberry", "tangerine", "ugli", "vanilla",
-		"watermelon", "xigua", "yam", "zucchini",
-	}
-
-	passphrase := []string{}
-	size := 6
-	for i := 0; i < size; i++ {
-		passphrase = append(passphrase, words[rand.Intn(len(words))])
-	}
-
-	return strings.Join(passphrase, "-")
 }
