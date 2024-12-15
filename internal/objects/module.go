@@ -83,11 +83,12 @@ func (m *Module) Upload(params ...Upload) (*s3manager.UploadOutput, error) {
 // Put uploads an object to the S3 bucket using the PutObject API.
 // It takes the body of the object and additional parameters for customization.
 //
+// @param key The key of the object to upload.
 // @param body The body of the object to upload.
 // @param params Optional parameters for customizing the upload (e.g., content type, ACL).
 // @return A pointer to the PutObjectOutput indicating the result of the upload, or an error.
-func (m *Module) Put(body interface{}, params ...Put) (*s3.PutObjectOutput, error) {
-	input := PutInput(m.Bucket, body, params...)
+func (m *Module) Put(key string, body interface{}, params ...Put) (*s3.PutObjectOutput, error) {
+	input := PutInput(m.Bucket, key, body, params...)
 
 	return m.Sdk.PutObject(input)
 }
